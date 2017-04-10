@@ -27,28 +27,35 @@ public class GameController : MonoBehaviour
     public GameObject playerInputField;
     public int getRand;
     public bool scull = true;
+
     // Use this for initialization
     void Start ()
 	{
-		if (cam == null) {
+		if (cam == null)
+		{
 			cam = Camera.main;
-
 		}
+
+		// Leaderboard cleanup
+		// PlayerPrefs.DeleteAll();
+
+		// Hat position
 		playing = false;
 		Vector3 upperCorner = new Vector3 (Screen.width, Screen.height, 0.0f);
 		Vector3 targetWidth = cam.ScreenToWorldPoint (upperCorner);
 		float ballWidth = bunnyRabbits[0].GetComponent<Renderer> ().bounds.extents.x;
 		maxWidth = targetWidth.x - ballWidth;
-     // PlayerPrefs.DeleteAll();
+
 		UpdateText ();
+
         StartCoroutine(StartCountdown());
         StartCoroutine(Spawn(3.0f));  
     }
+
 	void FixedUpdate()
 	{
 		if (playing)
 		{
-
 			timeLeft -= Time.deltaTime;
 			if (timeLeft < 0)
 			{
@@ -57,20 +64,21 @@ public class GameController : MonoBehaviour
 			UpdateText();
 		}
 	}
+
     public IEnumerator Spawn(float timeSpawn)
     {
         yield return new WaitForSeconds(4);
         hatController.ToggleControl(true);
         playing = true;
+
         while (timeLeft > 0 && scoreClass.score >= 0)
         {
-            Vector3 spawnPosition = new Vector3(
-                Random.Range(-maxWidth, maxWidth),
-                transform.position.y,
-                0.0f);
+            Vector3 spawnPosition = new Vector3(Random.Range(-maxWidth, maxWidth),transform.position.y,0.0f);
             Quaternion spawnRotation = Quaternion.identity;
+
+            // Spawn management
             WasItScull();
-                Instantiate(bunnyRabbits[getRand], spawnPosition, spawnRotation);
+            Instantiate(bunnyRabbits[getRand], spawnPosition, spawnRotation);
             if (getRand > 0)
             {
                 scull = true;
@@ -79,17 +87,22 @@ public class GameController : MonoBehaviour
             {
                 scull = false;
             }
+
+            // Speedup
             if (scoreClass.score % 5 == 0 && scoreClass.score > 0 && scoreClass.score < 50)
             {
                 addTime = addTime + 0.2f;
             }
             yield return new WaitForSeconds(timeSpawn / addTime);
         }
+
+            // Game over
             timeLeft = 0.0f;
             yield return new WaitForSeconds(0.5f);
             hatController.ToggleControl(false);
             yield return new WaitForSeconds(0.5f);
             gameOverText.SetActive(true);
+            // Score management
             GetComponent<Leaderboard>().CheckScores(scoreClass.score);
             yield return new WaitForSeconds(0.5f);
             leaderBoard.SetActive(true);
@@ -106,10 +119,15 @@ public class GameController : MonoBehaviour
                 menuButton.SetActive(true);
             }
         }
-	public void UpdateText(){
+
+	// Upd time left
+	public void UpdateText()
+	{
 		timerText.text = "Time Left:\n" + Mathf.RoundToInt (timeLeft);
 	}
-        int getRandom()
+
+	// Spawn management
+    int getRandom()
     {
         if(Random.Range(0.0f, 1.0f) < 0.6f)
         {
@@ -118,6 +136,7 @@ public class GameController : MonoBehaviour
         return Random.Range(1, bunnyRabbits.Length);
     }
 
+    // Spawn management
     public void WasItScull()
     {
         if (scull)
@@ -129,16 +148,19 @@ public class GameController : MonoBehaviour
             getRand = getRandom();
         }
     }
+
+    // Score management
     public void InitialsEntered()
     {
        GetComponent<Leaderboard>().DrawNames(playerInputField.GetComponentInChildren<InputField>().text );
         submitButton.SetActive(false);
         playerInputField.SetActive(false);
-      //  yield return new WaitForSeconds(0.5f);
+     // yield return new WaitForSeconds(0.5f);
         restartButton.SetActive(true);
         menuButton.SetActive(true);
     }
-    //float countDown;
+
+    // Starting game countdown
     IEnumerator StartCountdown(float countdownValue = 4.0f)
     {
         while (countdownValue > 0)
@@ -148,7 +170,6 @@ public class GameController : MonoBehaviour
             countdownValue--;
             countdownText.text = "Get Ready!\n" + Mathf.RoundToInt(countdownValue);
         }
-
         countdownText.GetComponent<Text>().enabled = false;
     }
 }

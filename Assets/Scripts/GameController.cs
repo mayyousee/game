@@ -99,6 +99,7 @@ public class GameController : MonoBehaviour
         }
 
         // Game over
+        // Mb this will work that way
         StartCoroutine(GameOver());
 
         /*timeLeft = 0.0f;

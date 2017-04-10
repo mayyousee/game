@@ -98,29 +98,31 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(timeSpawn / addTime);
         }
 
-            // Game over
-            timeLeft = 0.0f;
-            yield return new WaitForSeconds(0.5f);
-            hatController.ToggleControl(false);
-            yield return new WaitForSeconds(0.5f);
-            gameOverText.SetActive(true);
-            // Score management
-            GetComponent<Leaderboard>().CheckScores(scoreClass.score);
-            yield return new WaitForSeconds(0.5f);
-            leaderBoard.SetActive(true);
-            GetComponent<Leaderboard>().DrawScores();
-            if (GetComponent<Leaderboard>().isScore)
-            {
-                playerInputField.SetActive(true);
-                submitButton.SetActive(true);
-            }
-            else
-            {
-                yield return new WaitForSeconds(0.5f);
-                restartButton.SetActive(true);
-                menuButton.SetActive(true);
-            }
+        // Game over
+        StartCoroutine(GameOver());
+
+        /*timeLeft = 0.0f;
+        yield return new WaitForSeconds(0.5f);
+        hatController.ToggleControl(false);
+        yield return new WaitForSeconds(0.5f);
+        gameOverText.SetActive(true);
+        // Score management
+        GetComponent<Leaderboard>().CheckScores(scoreClass.score);
+        yield return new WaitForSeconds(0.5f);
+        leaderBoard.SetActive(true);
+        GetComponent<Leaderboard>().DrawScores();
+        if (GetComponent<Leaderboard>().isScore)
+        {
+        playerInputField.SetActive(true);
+        submitButton.SetActive(true);
         }
+        else
+        {
+        yield return new WaitForSeconds(0.5f);
+        restartButton.SetActive(true);
+        menuButton.SetActive(true);
+        }*/
+    }
 
 	// Upd time left
 	public void UpdateText()
@@ -157,7 +159,6 @@ public class GameController : MonoBehaviour
        GetComponent<Leaderboard>().DrawNames(playerInputField.GetComponentInChildren<InputField>().text );
         submitButton.SetActive(false);
         playerInputField.SetActive(false);
-     // yield return new WaitForSeconds(0.5f);
         restartButton.SetActive(true);
         menuButton.SetActive(true);
     }
@@ -174,4 +175,28 @@ public class GameController : MonoBehaviour
         }
         countdownText.GetComponent<Text>().enabled = false;
     }
+
+    IEnumerator GameOver();
+    {
+     timeLeft = 0.0f;
+     yield return new WaitForSeconds(0.5f);
+     hatController.ToggleControl(false);
+     yield return new WaitForSeconds(0.5f);
+     gameOverText.SetActive(true);
+     // Score management
+     GetComponent<Leaderboard>().CheckScores(scoreClass.score);
+     yield return new WaitForSeconds(0.5f);
+     leaderBoard.SetActive(true);
+     GetComponent<Leaderboard>().DrawScores();
+     if (GetComponent<Leaderboard>().isScore)
+     {
+        playerInputField.SetActive(true);
+        submitButton.SetActive(true);
+     }
+     else
+     {
+        yield return new WaitForSeconds(0.5f);
+        restartButton.SetActive(true);
+        menuButton.SetActive(true);
+     }
 }

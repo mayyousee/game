@@ -52,6 +52,7 @@ public class GameController : MonoBehaviour
         StartCoroutine(Spawn(3.0f));  
     }
 
+    // Game timer
 	void FixedUpdate()
 	{
 		if (playing)
@@ -65,6 +66,7 @@ public class GameController : MonoBehaviour
 		}
 	}
 
+    // Starting spawn, game over events
     public IEnumerator Spawn(float timeSpawn)
     {
         yield return new WaitForSeconds(4);

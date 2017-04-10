@@ -177,7 +177,7 @@ public class GameController : MonoBehaviour
         countdownText.GetComponent<Text>().enabled = false;
     }
 
-    IEnumerator GameOver();
+	IEnumerator GameOver ()
     {
      timeLeft = 0.0f;
      yield return new WaitForSeconds(0.5f);
@@ -200,4 +200,5 @@ public class GameController : MonoBehaviour
         restartButton.SetActive(true);
         menuButton.SetActive(true);
      }
+	}
 }
